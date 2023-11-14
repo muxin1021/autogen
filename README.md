@@ -1,3 +1,16 @@
+# Welcome to Carles River Planning Hearing!
+## Quickstart
+The easiest way to start playing is
+1. Click below to use the GitHub Codespace
+
+ [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/srcJin/autogen_forked?quickstart=1)
+
+
+
+
+
+
+
 [![PyPI version](https://badge.fury.io/py/pyautogen.svg)](https://badge.fury.io/py/pyautogen)
 [![Build](https://github.com/microsoft/autogen/actions/workflows/python-package.yml/badge.svg)](https://github.com/microsoft/autogen/actions/workflows/python-package.yml)
 ![Python Version](https://img.shields.io/badge/3.8%20%7C%203.9%20%7C%203.10%20%7C%203.11-blue)
