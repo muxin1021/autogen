@@ -188,6 +188,7 @@ class GroupChatManager(ConversableAgent):
             # The speaker sends the message without requesting a reply
             speaker.send(reply, self, request_reply=False)
             message = self.last_message(speaker)
+            # print("run_chat, message.content=", message.content)
         return True, None
 
     async def a_run_chat(
