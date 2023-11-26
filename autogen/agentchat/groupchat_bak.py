@@ -4,13 +4,6 @@ from typing import Dict, List, Optional, Union
 from .agent import Agent
 from .conversable_agent import ConversableAgent
 import logging
-import nltk
-from nltk.tokenize import word_tokenize
-from nltk.corpus import stopwords
-from nltk.sentiment import SentimentIntensityAnalyzer
-
-stop_words = set(stopwords.words("english"))
-sia = SentimentIntensityAnalyzer()
 
 logger = logging.getLogger(__name__)
 
@@ -195,27 +188,7 @@ class GroupChatManager(ConversableAgent):
             # The speaker sends the message without requesting a reply
             speaker.send(reply, self, request_reply=False)
             message = self.last_message(speaker)
-            # print("run_chat, message.content=", message)
-
-            # Start NLP Anlaysis
-            words = word_tokenize(message["content"].lower())
-
-            filtered_words = [word for word in words if word.isalnum() and word not in stop_words]
-            keywords = ["affordable", "safety", "community", "costs", "quality"]
-            opinion_keywords = ["disagree", "agree"]
-            extent_keywords = ["partially", "strongly"]
-
-            extracted_keywords = [word for word in filtered_words if word in keywords]
-            extracted_opinions = [word for word in filtered_words if word in opinion_keywords]
-            extracted_extent = [word for word in filtered_words if word in extent_keywords]
-            sentiment = sia.polarity_scores(" ".join(filtered_words))
-
-            print("---------------NLP Analysis-------------")
-            print("Message Keywords = ", extracted_keywords)
-            print("Extent = ", extracted_extent)
-            print("Opinion = ", extracted_opinions)
-            print("Sentiment Score = ", sentiment)
-
+            # print("run_chat, message.content=", message.content)
         return True, None
 
     async def a_run_chat(
