@@ -8,6 +8,7 @@ import nltk
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 from nltk.sentiment import SentimentIntensityAnalyzer
+from keywords import affordability_keywords
 
 stop_words = set(stopwords.words("english"))
 sia = SentimentIntensityAnalyzer()
@@ -201,20 +202,15 @@ class GroupChatManager(ConversableAgent):
             words = word_tokenize(message["content"].lower())
 
             filtered_words = [word for word in words if word.isalnum() and word not in stop_words]
-            keywords = ["affordable", "safety", "community", "costs", "quality"]
-            opinion_keywords = ["disagree", "agree"]
-            extent_keywords = ["partially", "strongly"]
 
-            extracted_keywords = [word for word in filtered_words if word in keywords]
-            extracted_opinions = [word for word in filtered_words if word in opinion_keywords]
-            extracted_extent = [word for word in filtered_words if word in extent_keywords]
+            # extracted_keywords = [word for word in filtered_words if word in keywords]
             sentiment = sia.polarity_scores(" ".join(filtered_words))
 
-            print("---------------NLP Analysis-------------")
-            print("Message Keywords = ", extracted_keywords)
-            print("Extent = ", extracted_extent)
-            print("Opinion = ", extracted_opinions)
+            print("---------------NLP Analysis ------------------")
+            # print("Keywords = ", extracted_keywords)
             print("Sentiment Score = ", sentiment)
+            print("----------------------------------------------")
+            print("----------------------------------------------")
 
         return True, None
 
