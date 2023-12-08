@@ -1,3 +1,5 @@
+
+
 from dataclasses import dataclass
 import sys
 from typing import Dict, List, Optional, Union
@@ -6,9 +8,18 @@ from .conversable_agent import ConversableAgent
 import logging
 import nltk
 from nltk.tokenize import word_tokenize
+from nltk.stem import WordNetLemmatizer
 from nltk.corpus import stopwords
 from nltk.sentiment import SentimentIntensityAnalyzer
-from keywords import affordability_keywords
+
+from keywords_v2 import (
+    affordability_keywords,
+    safety_keywords,
+    equity_keywords,
+    community_keywords,
+    financial_keywords,
+    commercial_keywords,
+)
 
 stop_words = set(stopwords.words("english"))
 sia = SentimentIntensityAnalyzer()
@@ -199,18 +210,50 @@ class GroupChatManager(ConversableAgent):
             # print("run_chat, message.content=", message)
 
             # Start NLP Anlaysis
+                        # Tokenize and filter the message
+
             words = word_tokenize(message["content"].lower())
 
             filtered_words = [word for word in words if word.isalnum() and word not in stop_words]
+            # Lemmatize and extract keywords
+            lemmatized_words = [lemmatizer.lemmatize(word) for word in filtered_words]
+            affordability_keywords_extracted = [word for word in lemmatized_words if word in affordability_keywords]
+            safety_keywords_extracted = [word for word in lemmatized_words if word in safety_keywords]
+            equity_keywords_extracted = [word for word in lemmatized_words if word in equity_keywords]
+            community_keywords_extracted = [word for word in lemmatized_words if word in community_keywords]
+            financial_keywords_extracted = [word for word in lemmatized_words if word in financial_keywords]
+            commercial_keywords_extracted = [word for word in lemmatized_words if word in commercial_keywords]
 
-            # extracted_keywords = [word for word in filtered_words if word in keywords]
+
+            # Count occurrences
+            kaffordability_keywords_counts = {keyword: extracted_keywords.count(keyword) for keyword in set(affordability_keywords_extracted)}
+            safety_keywords_counts = {keyword: extracted_keywords.count(keyword) for keyword in set(safety_keywords_extracted)}
+            equity_keywords_counts = {keyword: extracted_keywords.count(keyword) for keyword in set(equity_keywords_extracted)}
+            community_keywords_counts = {keyword: extracted_keywords.count(keyword) for keyword in set(community_keywords_extracted)}
+            financial_keywords_counts = {keyword: extracted_keywords.count(keyword) for keyword in set(financial_keywords_extracted)}
+            commercial_keywords_counts = {keyword: extracted_keywords.count(keyword) for keyword in set(commercial_keywords_extracted)}
+            
+
             sentiment = sia.polarity_scores(" ".join(filtered_words))
 
-            print("---------------NLP Analysis ------------------")
-            # print("Keywords = ", extracted_keywords)
+            print("-------------------------------------------------")
+            print("Affordability = ", kaffordability_keywords_extracted)
+            print("Safety = ", safety_keywords_extracted)
+            print("Equity = ", equity_keywords_extracted)
+            print("Community = ", community_keywords_extracted)
+            print("Financial = ", financial_keywords_extracted)
+            print("Commercial = ", commercial_keywords_extracted)
+            print("--------------- Keyword Counts ------------------")
+            print("Affordability = ", kaffordability_keywords_counts)
+            print("Safety = ", safety_keywords_counts)
+            print("Equity = ", equity_keywords_counts)
+            print("Community = ", community_keywords_counts)
+            print("Financial = ", financial_keywords_counts)
+            print("Commercial = ", commercial_keywords_counts)
+            print("---------Sentiment Score Analysis ---------------")
             print("Sentiment Score = ", sentiment)
-            print("----------------------------------------------")
-            print("----------------------------------------------")
+            print("-------------------------------------------------")
+            print("-------------------------------------------------")
 
         return True, None
 
